@@ -1,0 +1,25 @@
+version: '3'
+volumes:  
+  postgres_data: {} 
+services:  
+  testapp:    
+    build:      
+      context: .      
+      dockerfile: ./docker/app/Dockerfile    
+    depends_on:      
+      - app_db  
+  app_db:    
+    image: postgres    
+    volumes:      
+      - postgres_data:/var/lib/postgresql/data  
+    # This is optional, just to connect to the database from outside    
+    # ports:  
+    #   - 5432:5432
+  testweb:    
+    build:      
+      context: .      
+      dockerfile: ./docker/web/Dockerfile    
+    depends_on:      
+      - testapp    
+    ports:      
+      - 8099:80  #Port to connect from outside : Port from the docker container

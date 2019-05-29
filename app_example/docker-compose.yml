@@ -1,0 +1,25 @@
+version: '3'
+volumes:  
+  postgres_data: {} 
+services:  
+  app_example_rails:    
+    build:      
+      context: .      
+      dockerfile: ./docker/app/Dockerfile    
+    depends_on:      
+      - app_example_database  
+  app_example_database:    
+    image: postgres    
+    volumes:      
+      - postgres_data:/var/lib/postgresql/data  
+    # This is optional, just to connect to the database from outside    
+    # ports:  
+    #   - 5432:5432
+  app_example_nginx:    
+    build:      
+      context: .      
+      dockerfile: ./docker/web/Dockerfile    
+    depends_on:      
+      - app_example_rails    
+    ports:      
+      - 8050:80  #Port to connect from outside : Port from docker
